@@ -19,11 +19,18 @@ export default function ConfigurePage() {
   const [durationDraft, setDurationDraft] = useState({ calendarSec: 10, makerSec: 20 });
 
   const loadAll = useCallback(async () => {
-    const [{ data: spacesData }, { data: settingsData }, { data: screensData }] = await Promise.all([
+    const [
+      { data: spacesData, error: spacesError },
+      { data: settingsData, error: settingsError },
+      { data: screensData, error: screensError },
+    ] = await Promise.all([
       supabase.from('spaces').select('*').order('id'),
       supabase.from('settings').select('*').single(),
       supabase.from('screens').select('*').order('first_seen', { ascending: false }),
     ]);
+    if (spacesError) console.error('spaces query failed:', spacesError);
+    if (settingsError) console.error('settings query failed:', settingsError);
+    if (screensError) console.error('screens query failed:', screensError);
 
     setSpaces(spacesData ?? []);
     if (settingsData) {
