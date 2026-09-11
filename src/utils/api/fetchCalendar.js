@@ -114,9 +114,6 @@ export const fetchCalendarDisplay = async (spaceId) => {
     // The API wraps payloads in { status, data }.
     // Guard against unexpected shapes.
     if (!json || !json.status || !Array.isArray(json.data)) {
-      console.error(
-        '[fetchCalendar] Unexpected response structure:', json
-      );
       return FALLBACK_RESPONSE;
     }
 
